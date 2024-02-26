@@ -116,6 +116,6 @@ I did two main tweaks or changes to make this tool work with .onion sites:
 
 * Basic web crawler - [Here](https://github.com/n0desNc0des/Web-weaver/blob/main/Web_weaver.py)
 * Crawler that works with .onion sites - [Here](https://github.com/n0desNc0des/Web-weaver/blob/main/Web_weaver_tor.py)
-* sourcecode of this markdown file - [Here]()
+* sourcecode of this markdown file - [Here](https://github.com/n0desNc0des/Web-weaver/blob/main/README.md?plain=1)
 
 ---
