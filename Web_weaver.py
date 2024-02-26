@@ -1,28 +1,33 @@
-#!/usr/bin/python
+#!/usr/bin/env python
 
+import re
+from urllib.parse import urlparse, urljoin
 import requests
 
-def request(url):
-	try:
-		return requests.get("http://" + url)
-	except requests.exceptions.ConnectionError:
-		pass
 
-path=[]
-def dirdiscover(url):
-	with open("common_dir.txt","r") as wordlist_file:
-		for line in wordlist_file:
-			word = line.strip()
-			test_url = url + "/" + word
-			response = request(test_url)
-			if response :
-				print "[+] Discovered URL ----> " + test_url
-				path.append(word)
+target_url = "http://www.sphoorthyengg.ac.in/"
+target_links = []
 
-url="192.168.44.101/dvwa"
-#edit the url you want to scan
-dirdiscover(url)
+def extract_links_from(url):
+    try:
+        response = requests.get(url)
+        response.raise_for_status()
+        return re.findall('(?:href=")(.*?)"', response.content.decode('utf-8'), errors = 'replace')
+    except requests.exceptions.ConnectionError as e:
+        print(f"Error: {e}")
+        return []
 
-#recursively gothrough each and every path		
-for paths in path:
-	dirdiscover(url+"/"+ paths)
+def crawl(url):
+    href_links = extract_links_from(url)
+    for link in href_links:
+        link = urljoin(url, link)
+
+        if "#" in link:
+            link = link.split("#")[0]
+
+        if target_url in link and link not in target_links:
+            target_links.append(link)
+            print(link)
+            crawl(link)
+
+crawl(target_url)
